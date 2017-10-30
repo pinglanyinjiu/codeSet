@@ -1,0 +1,24 @@
+/*
+  k进入循环体 一直循环 至满足条件
+*/
+
+public class Test {
+
+	public static void main(String[] args) {
+		
+		for (int i = 4; i >0; i--) {
+			int k = 0;
+			do {
+				k++;
+				if (k == 2) {
+					break;
+				}
+			} while (k <= i);
+			System.out.print(k);
+			
+		}
+	}
+}
+
+结果：
+  2222
