@@ -1,0 +1,27 @@
+/*
+  int 作为参数，对形参值的修改不会影响到实参，对于StringBuffer类型的参数，对形参对象内容的修改影响到了实参。
+  Java应用中永远不会传递对象，而只传递对象引用。
+  本质上，引用传递还是通过传递值来实现的，传递的是地址的值。
+*/
+
+public class Test {
+
+	public static void main(String[] args) {
+		int i = 1;
+		StringBuffer s1 = new StringBuffer("Hello");
+		testPassParameter(s1,i);
+		System.out.println(s1);
+		System.out.println(i);
+	}
+
+	private static void testPassParameter(StringBuffer s1, int i) {
+		// TODO Auto-generated method stub
+		s1.append(" world");
+		i = 2;
+	}
+
+}
+
+结果：
+  Hello world
+  1
