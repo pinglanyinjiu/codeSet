@@ -1,0 +1,23 @@
+/*
+  类A是main方法的一个内部类，初始化了一个A对象，对象属性i的值3，经过类型转换，a 是这个对象的引用
+*/
+
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		class A{
+			public int i = 3;
+		}
+		
+		Object o = (Object)new A();
+		A a = (A)o;
+		System.out.println("i= " + a.i);
+	}
+
+}
+
+结果：
+  i= 3
+  
+  
