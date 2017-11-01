@@ -1,0 +1,69 @@
+/*
+  为什么是sqoop1.4.6? 稳定版，sqoop2 (1.99.6)并不完善，和sqoop1 并不兼容，不推荐在生产环境中使用。
+  
+  sqoop1 是用Java编写的，完全客户端驱动 ，命令行导入导出  至HDFS    
+  例子：
+  #把Mysql中testdb.PERSON表导入HDFS中
+  sqoop import --connect jdbc:mysql://localhost/testdb --table PERSON --username test --password ******
+    
+    此命令形成一系列任务：
+      1.生成MySQL的SQL代码
+      2.执行MySQL的SQL代码
+      3.生成Map作业。
+      4.执行Map作业。
+      5.数据传输到HDFS上
+      
+  # 将hdfs上的/user/localadmin/CLIENTS 目录下的文件到MySQL的testdb.CLIENTS_INTG表中
+  sqoop export --connect jdbc:mysql://localhost/testdb --table CLIENTS_INTG --username test --password ****** --export-dir /user/localadmin/CLIENTS
+  
+    此命令生成一系列任务：
+      1.生成Map 作业
+      2.执行Map作业
+      3.从hdfs 的 /user/localadmin/CLIENTS的路径传输数据
+      4.生成Mysql的代码
+      5.向MySQL的testdb.CLIENTS_INTG表插入数据
+  
+  sqoop1
+    支持数据从RDBMS传输到Hive或Hbase
+    
+    1.覆盖导入
+                                                                                                        mysql的customer表 | 向hive表导入 | 目标hive库表                                                                                                           
+    sqoop import --connect jdbc:mysql://cdh1:3306/source?useSSL=false --username root --password ****** --table customer --hive-import --hive-table rds.customer --hive-overwrite
+    
+    2.增量导入
+    
+    sqoop job --create myjobs_1 \
+    -- \
+    --connect "jdbc:mysql://cdh1:3306/source?useSSL=false&user=root&password=*****" \
+    --table sales_order \
+    --columns "order_number,customer_number,product_code,order_date,entry_date,order_amount" \
+    --where "entry_date < current_date()" \
+    --hive-import \
+    --hive-table rds.sales_order \
+    --incremental append \
+    --check-column entry_date \
+    --last-value '1900-01-01'
+    
+      查看此时作业中保存的last-value:
+      sqoop job --show myjob_1 | grep last.value            显示1900-01-01
+      
+      首次执行作业：
+      sqoop job --exec myjob_1
+      
+      完成后查询 rds.sales_order ：
+      select * from rds.sales_order order by order_number desc;
+      
+      再查看此时作业中保存的last-value: sqoop job --show myjob_1 | grep last.value       显示当前日期
+    
+    
+    不支持数据从Hive或Hbase　直接传输到RDBMS  ，变通方案如下：
+      1.从hive或hbase 抽取数据到HDFS（文本文件或Arvo文件）
+      2.使用sqoop将上一步的输出导入RDBMS
+      
+      
+      sqoop 优化
+        1.调整命令行参数，--batch    ,   指定导入数据的范围值 配置boundary-query参数   ，使用关系数据库自带的工具   ，--fetch-size 每次读取数据库的记录数, num-mappers 将该值设置成低于数据库所支持的最大连接数 ，split-by 指定分割工作单元的列名。
+        2.调整数据库：将不同的表空间存储到不同的物理盘，预判数据库的增长，导入导出时禁用外键约束，导入数据前删除索引导入后在重建。
+*/
+
+
