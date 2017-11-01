@@ -1,0 +1,63 @@
+1.启用压缩
+  hive-site.xml文件中设置hive.exec.compress.intermediate = true属性启用中间数据压缩，
+                        hive.intermediate.compression.code = org.apache.hadoop.io.compress.SnappyCodec
+                        hive.intermediate.compression.type = BLOCK
+  启用最终输出压缩       hive.exec.compress.output = true
+                     
+ 2. 优化连接：通过配置Map连接和倾斜连接的相关属性提升连接查询的性能
+    1).自动Map连接（当连接一个大表和一个小表，首先将小表装进缓存将节省每个数据节点上的读取时间，其次它避免了hive查询中连接倾斜，因为每个数据块的连接操作已经在Map阶段完成了）
+                   设置 hive.auto.convert.join = true
+                        hive.auto.convert.join.noconditionaltask = true
+                        hive.auto.convert.join.noconditionaltask.size = 10000000   
+                        hive.auto.convert.join.use.nonstaged = true
+    2).倾斜连接   （两个大表连接时，会先基于连接键分别对两个表进行排序，然后在连接它们，mapper将所有键值的所有行发送给同一个Reducer） 
+                   设置 hive.optimize.skewjoin = true
+                        hive.skewjoin.key = 100000
+                        hive.skewjoin.mapjoin.map.tasks = 10000
+                        hive.skewjoin.mapjoin.min.split = 33554432
+    3).桶Map的连接   （如果连接使用的表是按特定列分桶的，可以开启桶的Map连接提升性能）
+                        hive.optimize.bucketmapjoin = true
+                        hive.optimize.bucketmapjoin.sortedmerge = true
+                        
+  3. 避免使用 Order by 全局排序  
+                   hive中使用order by子句实现全局排序，order by 只用一个reducer产生结果，对于大数据集效率低。
+                   如果不需要全局有序，可以使用sort by 子句，该子句为每一个reducer 生成一个排好序的文件。
+                   如果要控制一个特定的数据行流向哪个reducer ，可以使用 distribute by 子句
+  4.使用 Tez 执行引擎
+                安装好tez后，配置 hive.execution.engine = tez
+              
+  5. 优化 limit 操作
+                设置 hive.limit.optimize.enable = true
+                     hive.limit.row.max.size = 100000
+                     hive.limit.optimize.limit.file = 10
+                     hive.limit.optimize.fetch.max = 50000
+                     
+  6.启用并行执行
+                    hive.exec.parallel = true
+                    hive.exec.parallel.thread.number = 8
+                    
+  7.启用MapReduce严格模式
+                    hive.mapred.mode = strict
+                    
+  8.使用单一的Reduce执行多个Group By
+                    hive.multigroupby.singlereducer = true
+                    
+  9.控制并行Reduce任务 (减少启动，调度，运行作业过程中的开销)
+                    hive.exec.reducers.bytes.per.reducer = 256000000
+                    hive.exec.reducers.max = 1009
+                    
+  10.启用向量化  (使hive从单行处理数据改为批处理方式)
+                    hive.vectorized.execution.enabled = true
+                    hive.vectorized.execution.reduce.enabled = true
+                    hive.vectorized.execution.reduce.groupby.enabled = true
+                    
+  11.  启用基于成本的优化器
+  
+                    hive.cbo.enable = true
+                    hive.compute.query.using.stats = true
+                    hive.stats.fetch.partition.stats = true
+                    hive.stats.fetch.column.stats = true
+                    
+  12.使用 ORC　文件格式
+                    hive.default.fileformat=Orc
+                    
