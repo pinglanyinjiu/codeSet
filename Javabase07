@@ -1,0 +1,25 @@
+数组求和
+
+import java.util.Arrays;
+
+public class Test {
+
+	public static void main(String[] args) {
+		int [] a = {1,8,2,3,0,8};
+		System.out.println(Arrays.toString(a));
+		
+		int sum = 0;
+		int i = 0;
+		while (i < a.length) {
+			sum += a[i];
+			i++;
+		}
+		
+		System.out.println(sum);
+	}
+
+}
+
+结果：
+  [1, 8, 2, 3, 0, 8]
+  22
