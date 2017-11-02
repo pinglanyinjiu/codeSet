@@ -1,0 +1,55 @@
+/**
+ * 快速复制 
+ *   System.arraycopy() 用来批量快速移动数组中的数据
+ *
+ */
+代码1：
+
+public class Test {
+
+	public static void main(String[] args) {
+		int[ ][ ] in = {{1,2,3},{4,5,6}};
+		int [ ][ ] ret = new int[in.length][in[0].length];
+		for (int i = 0; i < in.length; i++) {
+			for (int j = 0; j < in[0].length; j++) {
+				ret[i][j] = in[i][j];              //  逐个元素赋值
+			}
+		}
+		
+		for (int[] is : ret) {
+			for (int k : is) {
+				System.out.println(k);
+			}
+		}
+	}
+
+}
+
+
+代码2 ：
+
+public class Test {
+
+	public static void main(String[] args) {
+		int[ ][ ] in = {{1,2,3},{4,5,6}};
+		int [ ][ ] ret = new int[in.length][in[0].length];
+		for (int i = 0; i < in.length; i++) {
+			System.arraycopy(in[i], 0, ret[i], 0, in[0].length);;
+		}
+		
+		for (int[] is : ret) {
+			for (int k : is) {
+				System.out.println(k);
+			}
+		}
+	}
+  
+}
+
+结果均为：
+1
+2
+3
+4
+5
+6
