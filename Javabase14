@@ -1,0 +1,27 @@
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+
+public class Test {
+
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		//把字符串转成字节数组
+		Charset charset = Charset.forName("utf-8");
+		CharBuffer data = CharBuffer.wrap("数据".toCharArray());
+		ByteBuffer bb = charset.encode(data);
+		System.out.println(bb.limit());
+		
+		//把字节数组转成字符串
+		byte[] validBytes = "程序设计".getBytes("utf-8");
+		Charset charset1 = Charset.forName("utf-8");
+		CharBuffer buffer = charset1.decode(ByteBuffer.wrap(validBytes));
+		System.out.println(buffer);
+		
+	}
+
+}
+
+结果：
+6
+程序设计
