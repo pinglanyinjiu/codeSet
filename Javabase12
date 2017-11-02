@@ -1,0 +1,38 @@
+/**
+ *  数组内容去重
+ * @author lenovo
+ *
+ */
+public class Test {
+
+	public static void main(String[] args) {
+		int [] a = {1,1,2,2,3,3};
+		int len = noDups(a);
+		for (int i  = 0;  i < len; ++i) {
+			System.out.println(a[i]);
+		}
+	}
+
+	private static int noDups(int[] a) {
+		int current = 0;                            //当前值
+		for (int i = 0; i < a.length; i++) {              //将重复的数据置零
+			if (current == a[i]) {
+				a[i] = 0;
+			}else {
+				current = a[i];
+			}
+		}
+		
+		int offset = 0;                              //偏移量
+		for (int i = 0; i < a.length; i++) {            //将元素放到应有的位置
+			if (a[i]==0) {
+				offset++;
+			} else if (offset >0) {
+				a[i - offset] = a[i];                         //元素应该在的位置是：当前位置 - 偏移量
+			}
+			
+		}
+		return (a.length - offset);                      //返回数据实际长度
+	}
+}
+
