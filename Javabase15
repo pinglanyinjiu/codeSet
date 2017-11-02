@@ -1,0 +1,25 @@
+
+import java.sql.Date;
+
+public class Test {
+
+	public static void main(String[] args)  {
+		String name = "张三";
+		System.out.println(String.format("你好，%s", name));
+		
+		
+		Date d = new Date(System.currentTimeMillis());
+		String s = String.format("%tD", d);
+		System.out.println(s);
+		
+		System.out.println(String.format("%s有%d岁了", "张三",25));
+		
+	}
+
+}
+
+
+结果：
+你好，张三
+11/02/17
+张三有25岁了
