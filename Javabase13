@@ -1,0 +1,57 @@
+每次执行循环体语句时，一直都有效的布尔表达式叫循环不变式
+找出数组中元素的最大值在的位置
+
+代码1：
+public class Test {
+
+	public static void main(String[] args) {
+		int [] list = {1,3,5,7,9};
+		int indexMax = 0;
+		
+		for (int i = 0; i < list.length; i++) {
+			if (list[i] > list[indexMax]) {                    //循环不变式
+				indexMax = i;
+			}
+		}
+		System.out.println("位置"+indexMax+"值为: "+list[indexMax]);
+	}
+
+}
+
+结果：
+位置4值为: 9
+
+代码2：
+加上冒泡排序
+
+public class Test {
+
+	public static void main(String[] args) {
+		int [] list = {1,3,5,7,9,2,4,6,8,10};
+		int indexMax = 0;
+		
+		for (int i = 0; i < list.length; i++) {
+			if (list[i] > list[indexMax]) {
+				indexMax = i;
+			}
+		}
+		System.out.println("位置"+indexMax+"值为"+list[indexMax]);
+		
+		
+		//冒泡排序
+		for (int i = 0; i < list.length - 1; i++) {
+			if (list[i] > list[i+1]) {
+				int temp = list[i];
+				list[i] = list[i+1];
+				list[i+1] = temp;
+			}
+		}
+		System.out.println(Arrays.toString(list));
+	}
+
+}
+
+结果：
+位置9值为10
+[1, 3, 5, 7, 2, 4, 6, 8, 9, 10]
+
