@@ -1,0 +1,22 @@
+/** 从1加到100
+*/
+
+public class Test {
+
+	public static void main(String[] args){
+		int x =100;
+		int sum = getSum(x);
+		System.out.println("从一加到"+x+"的值为"+sum);
+	}
+
+	private static int getSum(int x) {
+		int sum = 0;
+		int k = 1;
+		do {
+			sum += k;
+			k++;
+		} while (k<=x);
+		return sum;
+	}
+
+}
