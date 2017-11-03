@@ -1,0 +1,26 @@
+二进制位数组类BitSet
+
+import java.util.BitSet;
+
+public class Test {
+
+	public static void main(String[] args) {
+
+		BitSet name = new BitSet(16);
+		name.set(10);
+		name.set(16);
+		name.set(1000080000);
+
+		// 遍历所有为1的位
+		for (int i = name.nextSetBit(0); i > 0; i = name.nextSetBit(i + 1)) {
+			System.out.println(i);
+		}
+	}
+
+}
+
+结果：
+
+10
+16
+1000080000
