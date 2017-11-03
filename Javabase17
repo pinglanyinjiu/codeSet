@@ -1,0 +1,25 @@
+整数运算：
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Test {
+
+	public static void main(String[] args) throws NumberFormatException, IOException  {
+		System.out.println("请输入一个整数");
+		BufferedReader reader = new BufferedReader( new InputStreamReader(System.in));
+		int i = Integer.parseInt(reader.readLine());
+		if (i < 100) {
+			System.out.println("整数不大于100");
+		} else {
+			System.out.println("整数不大于100");
+		}
+	}
+
+}
+
+结果：
+请输入一个整数
+100
+整数不大于100
