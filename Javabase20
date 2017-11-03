@@ -1,0 +1,29 @@
+对于相同的二进制数组，可以使用对应位有差别的数量来衡量相似度：海明距离
+
+public class Test {
+
+	public static void main(String[] args) {
+
+		int x = 1;
+		int y = 2;
+		System.out.println(hammingDistance(x, y));
+
+	}
+
+	private static int hammingDistance(int x, int y) {
+
+		int dist = 0;
+		int val = x ^ y;
+		// 统计val中1的个数
+		while (val > 0) {
+			++dist;
+			val &= val - 1; // 去掉val中最右的一个 1
+		}
+		return dist;
+	}
+
+}
+
+结果：
+2
+
