@@ -1,0 +1,36 @@
+/*
+判断虚拟机是否为64位
+*/
+
+public final class Test {
+	// 取得操作系统的属性
+
+	public static final String OS_ARCH = System.getProperty("os.arch");
+
+	public static boolean JRE_IS_64BIT = true;
+
+	static {
+		String x = System.getProperty("sun.arch.data.model");
+		System.out.println(x);
+		// 取得虚拟机系统属性
+		if (x != null) {
+			JRE_IS_64BIT = x.indexOf("64") != -1;
+		} else {
+			if (OS_ARCH != null && OS_ARCH.indexOf("64") != -1) {
+				JRE_IS_64BIT = true;
+			} else {
+				JRE_IS_64BIT = false;
+			}
+		}
+		System.out.println(JRE_IS_64BIT);
+	}
+
+	public static void main(String[] args) {
+		System.out.println(OS_ARCH);
+	}
+}
+
+结果：
+64
+true
+amd64
