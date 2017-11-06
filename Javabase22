@@ -1,0 +1,84 @@
+/*
+  测试Java程序堆栈大小
+*/
+
+public class Test extends Thread {
+
+	CountDownLatch cd1 = new CountDownLatch(1);
+
+	public void run() {
+  
+		try {
+			cd1.await();
+		} catch (InterruptedException e) {
+    
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+
+		for (int i = 0;; i++) {
+			new Thread(new Test()).start();
+			System.out.println("count = " + i);
+		}
+
+	}
+
+}
+
+
+
+
+结果：
+.
+..
+...
+count = 103443
+count = 103444
+count = 103445
+count = 103446
+count = 103447
+count = 103448
+count = 103449
+An unrecoverable stack overflow has occurred.
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_STACK_OVERFLOW (0xc00000fd) at pc=0x0000000073a93777, pid=420280, tid=0x00000000000679d0
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_102-b14) (build 1.8.0_102-b14)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.102-b14 mixed mode windows-amd64 compressed oops)
+# Problematic frame:
+# V  [jvm.dll+0x213777]An unrecoverable stack overflow has occurred.
+[thread 424504 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424532 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424524 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424536 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424548 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424520 also had an error][thread 424464 also had an error]
+
+An unrecoverable stack overflow has occurred.
+[thread 424328 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424312 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424340 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424352 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424376 also had an error]
+An unrecoverable stack overflow has occurred.
+[thread 424364 also had an error]
+count = 103450
+Exception in thread "main" java.lang.OutOfMemoryError: unable to create new native thread
+	at java.lang.Thread.start0(Native Method)
+	at java.lang.Thread.start(Thread.java:714)
+	at Test.main(Test.java:21)
+  
+
