@@ -1,0 +1,40 @@
+/**
+ * hadoop jar XXX.jar com.hdfsclient.DeleteFile
+ * 递归删除 文件或目录
+ */
+
+package com.hdfsclient;
+
+import java.io.IOException;
+import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
+public class DeleteFile {
+
+	public static void main(String[] args) {
+
+		String uri = "hdfs://master:9000/user/hadoop/test";
+		Configuration conf = new Configuration();
+		
+		FileSystem fs;
+		try {
+			fs = FileSystem.get(URI.create(uri),conf);
+			Path path = new Path("hdfs://master:9000/user/hadoop");
+			
+			//是否递归删除文件夹及文件夹下的文件,否
+			boolean isDeleted = fs.delete(path, false);
+			//boolean isDelete = fs.delete(path, true);
+			System.out.println(isDeleted);
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+	}
+
+}
