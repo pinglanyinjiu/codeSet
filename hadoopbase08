@@ -1,0 +1,65 @@
+/**
+ * SequenceFile 是HDFS API 提供的一种二进制文件支持，这种二进制文件直接将<key,value>对序列化到文件中，所以SequenceFile是不能直接查看的，可以通过
+ * hadoop dfs -text命令查看，后面跟要查看的hdfs 路径 
+ */
+
+
+package com.hdfsclient;
+
+import java.io.IOException;
+import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Text;
+
+public class SequenceFileWriter {
+
+	private static final String[] text = { "两个黄鹂鸣翠柳", "一行白鹭上青天", "窗含西岭千秋雪", "门泊东吴万里船", };
+
+	public static void main(String[] args) {
+
+		String uri = "hdfs://master:9000/user/hadoop/testseq";
+		Configuration conf = new Configuration();
+		SequenceFile.Writer writer = null;
+
+		FileSystem fs;
+		try {
+			fs = FileSystem.get(URI.create(uri), conf);
+			Path path = new Path(uri);
+			IntWritable key = new IntWritable();
+			Text value = new Text();
+			
+			//SequenceFile.Writer的构造方法需要制定键值对的类型，如果是日志文件那么时间戳作为key,日志内容是value是非常合适的
+			writer = SequenceFile.createWriter(fs, conf, path, key.getClass(), value.getClass());
+
+			for (int i = 0; i < 100; i++) {
+				key.set(100 - i);
+				value.set(text[i % text.length]);
+				writer.append(key, value);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeStream(writer);
+		}
+
+	}
+
+}
+
+命令
+hadoop dfs -text /user/hadoop/testseq
+结果：
+100 两个黄鹂鸣翠柳
+99 一行白鹭上青天
+98 窗含西岭千秋雪
+97 门泊东吴万里船
+.
+.
+2 窗含西岭千秋雪
+1 门泊东吴万里船
