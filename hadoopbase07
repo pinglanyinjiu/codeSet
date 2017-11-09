@@ -1,0 +1,52 @@
+/**文件存储的位置信息
+ * hadoop jar XXX.jar com.hdfsclient.LocationFile
+ * hdfs的存储由datanode的块完成
+ */
+
+package com.hdfsclient;
+
+import java.io.IOException;
+import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.BlockLocation;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
+public class LocationFile {
+
+	public static void main(String[] args) {
+
+		String uri = "hdfs://master:9000/user/test";
+		Configuration conf = new Configuration();
+
+		try {
+			FileSystem fs = FileSystem.get(URI.create(uri), conf);
+			Path path = new Path(uri);
+			FileStatus fileStatus = fs.getFileStatus(path);
+			BlockLocation[] blockLocations = fs.getFileBlockLocations(fileStatus, 0, fileStatus.getLen());
+
+			int blockLen = blockLocations.length;
+
+			for (int i = 0; i < blockLen; i++) {
+				String[] hosts = blockLocations[i].getHosts();
+				System.out.println("block_" + i + "_location:" + hosts[0]);
+			}
+			fs.close();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
+	}
+
+}
+
+
+结果：
+block_0_location:slaves1
+block_1_location:slaves2
+block_2_location:slaves3
