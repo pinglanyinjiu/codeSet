@@ -1,0 +1,51 @@
+/**
+ * 列出/user目录下的文件名
+ * hadoop jar XXX.jar com.hdfsclient.CheckFileIsExist
+ * 
+ */
+
+package com.hdfsclient;
+
+import java.io.IOException;
+import java.net.URI;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+
+public class CheckFileIsExist {
+
+	public static void main(String[] args) {
+
+		String uri = "hdfs://master:9000/user/hadoop/test";
+		Configuration conf = new Configuration();
+
+		FileSystem fs;
+		try {
+			fs = FileSystem.get(URI.create(uri), conf);
+			Path path = new Path(uri);
+
+			if (fs.exists(path)) {
+				FileStatus status[] = fs.listStatus(path);
+
+				for (int i = 0; i < status.length; i++) {
+					System.out.println(status[i].getPath().toString());
+				}
+				fs.close();
+
+			} else {
+
+				System.out.println("NotExists");
+
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
+	}
+
+}
