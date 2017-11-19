@@ -1,0 +1,7 @@
+hadoop 的新特性：
+  1.NameNode HA 是Hadoop 2.2 版本后增加的特性，解决了第一代Hadoop 的namenode单点故障，生产环境必备的功能。是 NameNode的热备，而非像SecondaryNameNode是NameNode的冷备。
+  2.技术难点：
+            （1）主NameNode（active）和NameNode(stand by)要状态同步。
+            （2）防止脑裂。在双机热备的系统中，两个主节点突然失去联系，这时，两个节点会同时以为对方出现故障，会本能的争抢资源，就像脑裂人一样。
+            （3）在准备切换时，对上层应用要做到无感知。
+  
